@@ -10,7 +10,7 @@ const initialCart = ()=>{
   return localStorageState ? JSON.parse(localStorageState) : [] 
 }
 
-   const [data,setData] = useState(db)
+   const [data] = useState(db)
 const [cart, setCart] = useState(initialCart)
 
 
