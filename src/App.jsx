@@ -5,9 +5,19 @@ import {db} from "./data/db"
 
 function App() {
 
-const [data,setData] = useState(db)
-const [cart, setCart] = useState([])
+const initialCart = ()=>{
+  const localStorageState = localStorage.getItem('cart')
+  return localStorageState ? JSON.parse(localStorageState) : [] 
+}
 
+   const [data,setData] = useState(db)
+const [cart, setCart] = useState(initialCart)
+
+
+useEffect(()=>{
+localStorage.setItem('cart', JSON.stringify(cart))
+
+},[cart])
 function addToCart(item){
    const idExiste = cart.findIndex((guitar)=> item.id === guitar.id)
     
