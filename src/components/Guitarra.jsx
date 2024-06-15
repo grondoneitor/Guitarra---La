@@ -1,10 +1,10 @@
 
-export default function Guitarra ({guitar, setCart,cart}){
+export default function Guitarra ({guitar,addToCart}){
 
 const {id ,name,image ,description,price} = guitar
   
-const handleClick =   (guitar)=> setCart([...cart,guitar])
-return(
+  
+   return(
 
             <div className="col-md-6 col-lg-4 my-4 row align-items-center">
                 <div className="col-4">
@@ -17,7 +17,7 @@ return(
                     <button 
                         type="button"
                         className="btn btn-dark w-100"
-                        onClick={() => handleClick(guitar)}
+                        onClick={() => addToCart(guitar)}
                     >Agregar al Carrito</button>
                 </div>
             </div>

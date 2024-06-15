@@ -7,12 +7,78 @@ function App() {
 
 const [data,setData] = useState(db)
 const [cart, setCart] = useState([])
-console.log
+
+function addToCart(item){
+   const idExiste = cart.findIndex((guitar)=> item.id === guitar.id)
+    
+   if(idExiste === -1){
+    item.quantity = 1
+    setCart([...cart,item])
+   }else{
+    const carritoParaActualizar = [...cart]
+    carritoParaActualizar[idExiste].quantity++
+    setCart(carritoParaActualizar)
+
+   }
+  
+
+}
+
+
+function romeveCart(id){
+  setCart(()=> cart.filter(guitar => guitar.id !== id) )
+}
+
+function addGuitar(id){
+const updateCart = cart.map(guitar=> {
+   if(guitar.id === id){
+return{ 
+        ...guitar,
+        quantity: guitar.quantity + 1
+   }
+  }
+  return guitar
+})
+  setCart(updateCart)
+}
+
+
+function removeGuitar(id){
+ const updateCart = cart.map(guitar =>{
+  if(guitar.id === id){
+    if(guitar.quantity === 1){
+        romeveCart(id)
+  
+      return null 
+    }else{
+     return{
+        ...guitar,
+        
+        quantity: guitar.quantity -1
+     }
+    }
+  }
+  return guitar
+ }).filter(item => item !== null)  
+setCart(updateCart)
+
+}
+
+function cleanCart(){
+  setCart([])
+}
+
   return (
     <>
    
-     <Header/>
-
+     <Header
+        cleanCart={cleanCart}
+        removeGuitar={removeGuitar}
+        addGuitar={addGuitar}
+        romeveCart={romeveCart}
+        cart={cart}
+     />
+  
     <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
 
@@ -24,6 +90,7 @@ console.log
                       guitar={guitar}
                       cart={cart}
                       setCart={setCart}
+                      addToCart={addToCart}
                     />
                     
                 )
