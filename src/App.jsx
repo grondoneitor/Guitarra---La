@@ -1,82 +1,10 @@
-import { useState,useEffect } from "react"
 import Header  from "./components/Header" 
 import Guitarra from "./components/Guitarra"
-import {db} from "./data/db"
+import { useCart } from "./hooks/useCart"
 
 function App() {
-
-const initialCart = ()=>{
-  const localStorageState = localStorage.getItem('cart')
-  return localStorageState ? JSON.parse(localStorageState) : [] 
-}
-
-   const [data] = useState(db)
-const [cart, setCart] = useState(initialCart)
-
-
-useEffect(()=>{
-localStorage.setItem('cart', JSON.stringify(cart))
-
-},[cart])
-function addToCart(item){
-   const idExiste = cart.findIndex((guitar)=> item.id === guitar.id)
-    
-   if(idExiste === -1){
-    item.quantity = 1
-    setCart([...cart,item])
-   }else{
-    const carritoParaActualizar = [...cart]
-    carritoParaActualizar[idExiste].quantity++
-    setCart(carritoParaActualizar)
-
-   }
-  
-
-}
-
-
-function romeveCart(id){
-  setCart(()=> cart.filter(guitar => guitar.id !== id) )
-}
-
-function addGuitar(id){
-const updateCart = cart.map(guitar=> {
-   if(guitar.id === id){
-return{ 
-        ...guitar,
-        quantity: guitar.quantity + 1
-   }
-  }
-  return guitar
-})
-  setCart(updateCart)
-}
-
-
-function removeGuitar(id){
- const updateCart = cart.map(guitar =>{
-  if(guitar.id === id){
-    if(guitar.quantity === 1){
-        romeveCart(id)
-  
-      return null 
-    }else{
-     return{
-        ...guitar,
-        
-        quantity: guitar.quantity -1
-     }
-    }
-  }
-  return guitar
- }).filter(item => item !== null)  
-setCart(updateCart)
-
-}
-
-function cleanCart(){
-  setCart([])
-}
+   
+  const { data,cart, addToCart, addGuitar,romeveCart, removeGuitar, cleanCart,stateDerivado, cartTotal} = useCart()
 
   return (
     <>
@@ -87,6 +15,8 @@ function cleanCart(){
         addGuitar={addGuitar}
         romeveCart={romeveCart}
         cart={cart}
+        stateDerivado={stateDerivado}
+        cartTotal={cartTotal}
      />
   
     <main className="container-xl mt-5">
@@ -99,7 +29,6 @@ function cleanCart(){
                       key={guitar.id}
                       guitar={guitar}
                       cart={cart}
-                      setCart={setCart}
                       addToCart={addToCart}
                     />
                     
